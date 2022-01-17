@@ -9,15 +9,20 @@ public class App{
         List<Partidos> partidos = new ArrayList<Partidos>();
         Partidos test;
         try{
-            BufferedReader br = new BufferedReader(new FileReader("src/teste.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("script/testes/cariacica/in/partidos.csv"));
+            int i=0;
             while(br.ready()){
                 String linha = br.readLine();
-                String separador[] = linha.split(",");
-                test = new Partidos(Integer.parseInt(separador[0]),Integer.parseInt(separador[1]),separador[2],separador[3]);
-                partidos.add(test);
-                System.out.println(partidos.get(0));
+                if(i!=0){
+                    String separador[] = linha.split(",");
+                    test = new Partidos(Integer.parseInt(separador[0]),Integer.parseInt(separador[1]),separador[2],separador[3]);
+                    partidos.add(test);
+                }else i = 1;
             }
             br.close();
+            for(Partidos elem: partidos){
+                System.out.println(elem);
+            }
         }catch(IOException ioe){
             ioe.printStackTrace();
         }
