@@ -2,8 +2,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.Collections;
 
-public class Candidatos extends Partidos{
+public class Candidatos extends Partidos implements Comparable<Candidatos>{
     private int numero_candidato,votos_nominais;
     private String nome_candidato,nome_urna,data_nasc;
     private char situacao;
@@ -73,12 +74,23 @@ public class Candidatos extends Partidos{
     }
 
     public void Eleitos(List<Candidatos> list_candidatos_Eleitos){
-        int i=1;
         System.out.println("Vereadores eleitos:");
-        for(Candidatos elem: list_candidatos_Eleitos){
+        printa_ListaCandidatos(list_candidatos_Eleitos);
+    }
+
+    public void mais_Votados(List<Candidatos> list_candidatos_Eleitos){
+        Collections.sort(list_candidatos_Eleitos);
+        System.out.println("Candidatos mais votados (em ordem decrescente de votação e respeitando número de vagas):");
+        printa_ListaCandidatos(list_candidatos_Eleitos);
+    }
+
+    private void printa_ListaCandidatos(List<Candidatos> list_Candidatos){
+        int i=1;
+        for(Candidatos elem: list_Candidatos){
             System.out.println(i + " - " + elem);
             i++;
         }
+        System.out.println();
     }
 
     /*@Override
@@ -99,6 +111,11 @@ public class Candidatos extends Partidos{
         return  this.nome_candidato + " / "
         + this.nome_urna + " (" + super.getSigla()
         + ", " + this.votos_nominais + " votos)";
+    }
+
+    @Override
+    public int compareTo(Candidatos c){
+        return c.votos_nominais - this.votos_nominais;
     }
 
 }
