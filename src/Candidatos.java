@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 
 public class Candidatos{
@@ -25,13 +28,34 @@ public class Candidatos{
         this.data_nasc = data_nasc;
     }
 
-    public Candidatos(){
+    public Candidatos() {}
 
+    public void preenche_Lista(List<Candidatos> list_Candidatos, String caminho){
+        try{
+            BufferedReader ca = new BufferedReader(new FileReader(caminho));
+            boolean i = false;
+            while(ca.ready()){
+                String linha = ca.readLine();
+                if(i == true){
+                    String separador[] = linha.split(",");
+                    Candidatos candidato = new Candidatos(Integer.parseInt(separador[0])
+                        , Integer.parseInt(separador[1])
+                        , separador[2], separador[3]
+                        , separador[4], separador[5]
+                        , separador[6], separador[7]
+                        , Integer.parseInt(separador[8]));
+                    list_Candidatos.add(candidato);
+                }else i = true;
+            }
+            ca.close();
+        }catch(IOException ioe){
+            ioe.printStackTrace();
+        }
     }
 
-    public void Numero_de_vagas (List<Candidatos> candidatos){
+    public void Numero_de_vagas (List<Candidatos> list_Candidatos){
         int n_Vagas = 0;
-        for(Candidatos elem: candidatos){
+        for(Candidatos elem: list_Candidatos){
            if(elem.situacao.equals("Eleito")){
                n_Vagas++;
            }
