@@ -44,6 +44,18 @@ public class Partidos {
         return this.sigla;
     }
 
+    public int getNumero(){
+        return this.numero_partido;
+    }
+
+    public int getVotosLegenda(){
+        return this.votos_Legenda;
+    }
+    
+    public String getNome(){
+        return this.nome;
+    }
+
     @Override
     public String toString(){
         return  "Numero Partido: " + this.numero_partido + 

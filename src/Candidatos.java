@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Collections;
 
 public class Candidatos extends Partidos implements Comparable<Candidatos>{
@@ -62,7 +63,7 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         }
     }
 
-    public void Numero_de_vagas (List<Candidatos> list_Candidatos, List<Candidatos> list_candidatos_Eleitos){
+    public int Numero_de_vagas (List<Candidatos> list_Candidatos, List<Candidatos> list_candidatos_Eleitos){
         int n_Vagas = 0;
         for(Candidatos elem: list_Candidatos){
            if(elem.situacao == 'E'){
@@ -71,6 +72,8 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
            }
         }
         System.out.printf("Número de vagas: %d\n\n",n_Vagas);
+
+        return n_Vagas;
     }
 
     public void Eleitos(List<Candidatos> list_candidatos_Eleitos){
@@ -84,8 +87,61 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         printa_ListaCandidatos(list_candidatos_Eleitos);
     }
 
+    public void Eleitos_se_Majoritario(List<Candidatos> list_Candidatos,List<Candidatos> list_candidatos_Eleitos,int n_Vagas){
+        Collections.sort(list_Candidatos);
+        System.out.println("Candidatos não eleitos e que seriam eleitos se a votação fosse majoritária:");
+        int i = 1;
+
+        for(Candidatos elem: list_Candidatos){
+            if(elem.situacao != 'E' && i <= n_Vagas){
+                System.out.println(i + " - " + elem);
+            }else if(i > n_Vagas) break;
+            i++;
+        }
+        System.out.println();
+    }
+    
+    public void Nao_eleitos_se_Majoritario(List<Candidatos> list_Candidatos,List<Candidatos> list_candidatos_Eleitos, int n_Vagas){
+        System.out.println("Candidatos eleitos no sistema proporcional vigente, e que não seriam eleitos se a votação fosse majoritária:");
+        int i = 1;
+        Candidatos candidatoAux = list_Candidatos.get(n_Vagas - 1);
+        for(Candidatos elem: list_Candidatos){
+            if(elem.situacao == 'E'){
+                if(elem.votos_nominais < candidatoAux.votos_nominais){
+                    System.out.println(i + " - " + elem);
+                }
+            }
+            i++;
+        }
+    }
+
+    public void votos_Partido(List<Candidatos> list_Candidatos, Partidos []vet_Partidos){
+        int [][]matPartidos = new int[100][2];
+        
+        for(int i = 0; i<100 ;i++){
+            matPartidos[i][0] = 0;
+            matPartidos[i][1] = 0;
+        }
+        for(Candidatos elem: list_Candidatos){
+            if(elem.situacao == 'E') matPartidos[elem.getNumero()][1]++;
+            matPartidos[elem.getNumero()][0] += elem.votos_nominais; 
+        }
+        List<Partidos> list_Partidos = new ArrayList<Partidos>();
+        for(Partidos elem: vet_Partidos){
+            if(elem != null){
+                Partidos partido = new Partidos(elem.getNumero(), elem.getVotosLegenda()+matPartidos[elem.getNumero()][0], elem.getNome(), elem.getSigla());
+                list_Partidos.add(partido);
+            }
+        }
+        //Collections.sort(list_Partidos);
+        for(Partidos elem: vet_Partidos){
+            if(elem != null)
+                System.out.println(elem.getSigla() + ": " + matPartidos[elem.getNumero()][0] + ", " + matPartidos[elem.getNumero()][1]);
+        }
+    }
+
     private void printa_ListaCandidatos(List<Candidatos> list_Candidatos){
-        int i=1;
+        int i = 1;
         for(Candidatos elem: list_Candidatos){
             System.out.println(i + " - " + elem);
             i++;
