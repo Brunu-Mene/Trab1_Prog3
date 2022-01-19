@@ -3,7 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Partidos {
-    private int numero_partido, votos_Legenda;
+    private int numero_partido, votos_Legenda, votos_Total;
     private String nome, sigla;
 
     public Partidos() {}
@@ -13,11 +13,12 @@ public class Partidos {
         this.sigla = sigla;
     }
 
-    public Partidos(int numero_partido, int votos_Legenda, String nome, String sigla) {
+    public Partidos(int numero_partido, int votos_Legenda, String nome, String sigla, int votos_Total) {
         this.numero_partido = numero_partido;
         this.votos_Legenda = votos_Legenda;
         this.nome = nome;
         this.sigla = sigla;
+        this.votos_Total = votos_Total;
     }
 
     public void preenche_Vetor(Partidos []vet_Partidos, String caminho){
@@ -31,7 +32,7 @@ public class Partidos {
                     vet_Partidos[Integer.parseInt(separador[0])] = new Partidos(Integer.parseInt(separador[0])
                     , Integer.parseInt(separador[1])
                     , separador[2]
-                    , separador[3]);
+                    , separador[3], 0);
                 }else i = true;
             }
             pr.close();
@@ -50,6 +51,10 @@ public class Partidos {
 
     public int getVotosLegenda(){
         return this.votos_Legenda;
+    }
+
+    public int getVotosTotal(){
+        return this.votos_Total;
     }
     
     public String getNome(){

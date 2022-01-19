@@ -5,15 +5,20 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Candidatos extends Partidos implements Comparable<Candidatos>{
     private int numero_candidato,votos_nominais;
-    private String nome_candidato,nome_urna,data_nasc;
+    private String nome_candidato,nome_urna;
+    Date data_nasc;
     private char situacao;
     private boolean sexo,destino_voto;
 
     public Candidatos() {}
 
-    public Candidatos(int numero_candidato, int votos_nominais,String situacao, String nome_candidato, String nome_urna, String sexo, String data_nasc, String destino_voto,int numero_partido, String sigla_partido) {
+    public Candidatos(int numero_candidato, int votos_nominais,String situacao, String nome_candidato, String nome_urna, String sexo, String data_nasc, String destino_voto,int numero_partido, String sigla_partido){
         super(numero_partido, sigla_partido);
         this.numero_candidato = numero_candidato;
         if(situacao.equals("Eleito")){
@@ -36,7 +41,12 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         }
         this.nome_candidato = nome_candidato;
         this.nome_urna = nome_urna;
-        this.data_nasc = data_nasc;
+
+        //KKKKKKK Q Q TA ACONTECENDO
+        try{
+            SimpleDateFormat sdformat = new SimpleDateFormat("dd/MM/yyyy");
+            this.data_nasc = sdformat.parse(data_nasc);
+        }catch (ParseException ex){ }
     }
 
     public void preenche_Lista(List<Candidatos> list_Candidatos, Partidos []vet_Partidos, String caminho){
@@ -130,17 +140,18 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         List<Partidos> list_Partidos = new ArrayList<Partidos>();
         for(Partidos elem: vet_Partidos){
             if(elem != null){
-                Partidos partido = new Partidos(elem.getNumero(), elem.getVotosLegenda()+matPartidos[elem.getNumero()][0], elem.getNome(), elem.getSigla());
+                Partidos partido = new Partidos(elem.getNumero(),
+                    elem.getVotosLegenda(), elem.getNome(), elem.getSigla(),
+                    elem.getVotosLegenda()+matPartidos[elem.getNumero()][0]);
                 list_Partidos.add(partido);
             }
         }
         Collections.sort(list_Partidos, new ComparaPartidos());
         int i=1;
-        //acertar aqui dps talvez o nome do elem.getVotosLegenda() (pq nao eh so de legenda sao todos os votos)
         System.out.println("Votação dos partidos e número de candidatos eleitos:");
         for(Partidos elem: list_Partidos){
             System.out.printf("%d - %s - %d, %d votos (%d nominais e %d de legenda), %d candidatos eleito\n",
-            i,elem.getSigla(),elem.getNumero(),elem.getVotosLegenda(),matPartidos[elem.getNumero()][0],
+            i,elem.getSigla(),elem.getNumero(),elem.getVotosTotal(),matPartidos[elem.getNumero()][0],
             vet_Partidos[elem.getNumero()].getVotosLegenda(), matPartidos[elem.getNumero()][1]);
             i++;
         }
@@ -163,9 +174,14 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         + ", " + this.votos_nominais + " votos)";
     }
 
+    //adicionar um criterio de desempata que escolha o candidato mais velho por cima;
+    //se a data de c > this, retonar 1, else return 0
     @Override
     public int compareTo(Candidatos c){
-        return c.votos_nominais - this.votos_nominais;
+        if(c.votos_nominais - this.votos_nominais == 0){
+            return c.data_nasc.compareTo(this.data_nasc);
+        }
+        else return c.votos_nominais - this.votos_nominais;
     }
 
 }
