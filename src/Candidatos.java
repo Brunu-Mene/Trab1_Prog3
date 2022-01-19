@@ -46,7 +46,7 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         try{
             SimpleDateFormat sdformat = new SimpleDateFormat("dd/MM/yyyy");
             this.data_nasc = sdformat.parse(data_nasc);
-        }catch (ParseException ex){ }
+        }catch (ParseException ex){}
     }
 
     public void preenche_Lista(List<Candidatos> list_Candidatos, Partidos []vet_Partidos, String caminho){
@@ -126,7 +126,7 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         System.out.println();
     }
 
-    public void votos_Partido(List<Candidatos> list_Candidatos, Partidos []vet_Partidos){
+    public void votos_Partido(List<Candidatos> list_Candidatos, Partidos []vet_Partidos, List<Partidos> list_Partidos){
         int [][]matPartidos = new int[100][2];
         
         for(int i = 0; i<100 ;i++){
@@ -137,7 +137,6 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
             if(elem.situacao == 'E') matPartidos[elem.getNumero()][1]++;
             matPartidos[elem.getNumero()][0] += elem.votos_nominais; 
         }
-        List<Partidos> list_Partidos = new ArrayList<Partidos>();
         for(Partidos elem: vet_Partidos){
             if(elem != null){
                 Partidos partido = new Partidos(elem.getNumero(),
@@ -146,13 +145,18 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
                 list_Partidos.add(partido);
             }
         }
-        Collections.sort(list_Partidos, new ComparaPartidos());
+        Collections.sort(list_Partidos, new Compara_Vt_Np());
         int i=1;
         System.out.println("Votação dos partidos e número de candidatos eleitos:");
         for(Partidos elem: list_Partidos){
-            System.out.printf("%d - %s - %d, %d votos (%d nominais e %d de legenda), %d candidatos eleito\n",
+            System.out.println(i + elem.toString() + elem.getVotosTotal() + 
+            " votos (" + matPartidos[elem.getNumero()][0] + 
+            " nominais e " + vet_Partidos[elem.getNumero()].getVotosLegenda() + 
+            "), " + matPartidos[elem.getNumero()][1] + 
+            " candidatos eleito");
+            /*System.out.printf("%d - %s - %d, %d votos (%d nominais e %d de legenda), %d candidatos eleito\n",
             i,elem.getSigla(),elem.getNumero(),elem.getVotosTotal(),matPartidos[elem.getNumero()][0],
-            vet_Partidos[elem.getNumero()].getVotosLegenda(), matPartidos[elem.getNumero()][1]);
+            vet_Partidos[elem.getNumero()].getVotosLegenda(), matPartidos[elem.getNumero()][1]);*/
             i++;
         }
         System.out.println();

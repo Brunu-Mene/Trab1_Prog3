@@ -1,6 +1,9 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class Partidos {
     private int numero_partido, votos_Legenda, votos_Total;
@@ -41,6 +44,19 @@ public class Partidos {
         }
     }
 
+    public void Votos_de_Legenda(List<Partidos> list_Partidos){
+        Collections.sort(list_Partidos, new Compara_Vt_Vl_Np());
+        int i=1;
+        System.out.println("Votação dos partidos (apenas votos de legenda):");
+        for(Partidos elem: list_Partidos){
+            double pc = 100*(Double.valueOf(elem.getVotosLegenda())/Double.valueOf(elem.getVotosTotal()));
+            System.out.print(i + elem.toString() + elem.votos_Legenda + " votos de legenda (");
+            System.out.printf("%.2f%% do total do partido)\n",pc);
+            i++;
+        }
+        System.out.println();
+    }
+
     public String getSigla(){
         return this.sigla;
     }
@@ -63,9 +79,28 @@ public class Partidos {
 
     @Override
     public String toString(){
-        return  "Numero Partido: " + this.numero_partido + 
-                ", Votos Legenda: " + this.votos_Legenda + 
-                ", Nome do Partido: " + this.nome + 
-                ", Sigla: " + this.sigla;
+        return " - " + this.sigla + " - " + this.numero_partido + ", ";
+    }
+}
+
+class Compara_Vt_Np implements Comparator<Partidos> {
+    public int compare(Partidos p1, Partidos p2){
+        if(p1.getVotosTotal() == p2.getVotosTotal()){
+            return p2.getNumero() - p1.getNumero();
+        }
+        else if(p1.getVotosTotal() > p2.getVotosTotal()) return -1;
+        else return 1;
+    }
+}
+
+class Compara_Vt_Vl_Np implements Comparator<Partidos> {
+    public int compare(Partidos p1, Partidos p2){
+        if(p1.getVotosLegenda() == p2.getVotosLegenda()){
+            if(p1.getVotosTotal() > p2.getVotosTotal()) return -1;
+            else if(p1.getVotosTotal() < p2.getVotosTotal()) return 1;
+            else return p2.getNumero() - p1.getNumero();
+        }
+        else if(p1.getVotosLegenda() > p2.getVotosLegenda()) return -1;
+        else return 1;
     }
 }
