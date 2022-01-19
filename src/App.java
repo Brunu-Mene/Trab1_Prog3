@@ -23,7 +23,7 @@ public class App{
         candidato.Eleitos(list_candidatos_Eleitos);
         candidato.mais_Votados(list_candidatos_Eleitos);
         candidato.Eleitos_se_Majoritario(list_Candidatos,list_candidatos_Eleitos,n_Vagas);
-        candidato.Nao_eleitos_se_Majoritario(list_Candidatos, list_candidatos_Eleitos, n_Vagas);
+        candidato.Nao_eleitos_se_Majoritario(list_Candidatos, n_Vagas);
         candidato.votos_Partido(list_Candidatos, vet_Partidos);
     }
 }

@@ -101,7 +101,7 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         System.out.println();
     }
     
-    public void Nao_eleitos_se_Majoritario(List<Candidatos> list_Candidatos,List<Candidatos> list_candidatos_Eleitos, int n_Vagas){
+    public void Nao_eleitos_se_Majoritario(List<Candidatos> list_Candidatos, int n_Vagas){
         System.out.println("Candidatos eleitos no sistema proporcional vigente, e que não seriam eleitos se a votação fosse majoritária:");
         int i = 1;
         Candidatos candidatoAux = list_Candidatos.get(n_Vagas - 1);
@@ -113,6 +113,7 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
             }
             i++;
         }
+        System.out.println();
     }
 
     public void votos_Partido(List<Candidatos> list_Candidatos, Partidos []vet_Partidos){
@@ -133,11 +134,17 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
                 list_Partidos.add(partido);
             }
         }
-        //Collections.sort(list_Partidos);
-        for(Partidos elem: vet_Partidos){
-            if(elem != null)
-                System.out.println(elem.getSigla() + ": " + matPartidos[elem.getNumero()][0] + ", " + matPartidos[elem.getNumero()][1]);
+        Collections.sort(list_Partidos, new ComparaPartidos());
+        int i=1;
+        //acertar aqui dps talvez o nome do elem.getVotosLegenda() (pq nao eh so de legenda sao todos os votos)
+        System.out.println("Votação dos partidos e número de candidatos eleitos:");
+        for(Partidos elem: list_Partidos){
+            System.out.printf("%d - %s - %d, %d votos (%d nominais e %d de legenda), %d candidatos eleito\n",
+            i,elem.getSigla(),elem.getNumero(),elem.getVotosLegenda(),matPartidos[elem.getNumero()][0],
+            vet_Partidos[elem.getNumero()].getVotosLegenda(), matPartidos[elem.getNumero()][1]);
+            i++;
         }
+        System.out.println();
     }
 
     private void printa_ListaCandidatos(List<Candidatos> list_Candidatos){
@@ -148,19 +155,6 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         }
         System.out.println();
     }
-
-    /*@Override
-    public String toString(){
-        return  "Numero Candidato: " + this.numero_candidato + 
-                ", Votos Nominais: " + this.votos_nominais + 
-                ", Situacao: " + this.situacao + 
-                ", Nome do Candidato: " + this.nome_candidato + 
-                ", Nome na Urna: " + this.nome_urna +
-                ", Sexo: " + this.sexo + 
-                ", Data de Nascimento: " + this.data_nasc + 
-                ", Destino Voto: " + this.destino_voto +
-                ", Numero Partido: " + this.numero_partido;
-    }*/
 
     @Override
     public String toString(){
