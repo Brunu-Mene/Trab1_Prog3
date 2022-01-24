@@ -1,13 +1,19 @@
 import java.util.ArrayList;
 import java.util.List;
 
-//Mudei a logica da lista de partidos para um vetor como hash e coloquei a classe Partido como pai da candidato
-//A gente precisava printar a sigla do partido dentro do toString da classe Candidatos pra especificação 2 entao
-//iria ter q haver uma relação de herença ae, entao eu preencho o vetor hash e com base no numero do partido
-//que a gente pega no arquivo de candidatos, eu consigo acessar o partido dessa posição, pegar a sigla dele e passar
-//para a classe pai do candidato em questão
+/**
 
-//Fiz uma lista de candidatos eleitos pra nao ter q percorrer a lista geral mais de 1 vez tanto pra somar quando salvar
+
+
+
+
+    TESTAR OS CRITÉRIOS DE DESEMPATE
+
+
+
+
+
+ */
 
 public class App{
     public static void main(String[] args) {
@@ -25,7 +31,8 @@ public class App{
         candidato.mais_Votados(list_candidatos_Eleitos);
         candidato.Eleitos_se_Majoritario(list_Candidatos,list_candidatos_Eleitos,n_Vagas);
         candidato.Nao_eleitos_se_Majoritario(list_Candidatos, n_Vagas);
-        candidato.votos_Partido(list_Candidatos, vet_Partidos, list_Partidos);
+        partido.votos_Partido(list_Candidatos, vet_Partidos, list_Partidos);
         partido.Votos_de_Legenda(list_Partidos);
+        candidato.Primeiro_Ultimo(list_Partidos, list_Candidatos);
     }
 }

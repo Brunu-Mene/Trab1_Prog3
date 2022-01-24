@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
-
+import java.util.Comparator;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,11 +14,11 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
     private String nome_candidato,nome_urna;
     Date data_nasc;
     private char situacao;
-    private boolean sexo,destino_voto;
+    private boolean sexo;
 
     public Candidatos() {}
 
-    public Candidatos(int numero_candidato, int votos_nominais,String situacao, String nome_candidato, String nome_urna, String sexo, String data_nasc, String destino_voto,int numero_partido, String sigla_partido){
+    public Candidatos(int numero_candidato, int votos_nominais,String situacao, String nome_candidato, String nome_urna, String sexo, String data_nasc,int numero_partido, String sigla_partido){
         super(numero_partido, sigla_partido);
         this.numero_candidato = numero_candidato;
         if(situacao.equals("Eleito")){
@@ -33,11 +33,6 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
             this.sexo = true;
         }else{
             this.sexo = false;
-        }
-        if(destino_voto.equals("Válido")){
-            this.destino_voto = true;
-        }else{
-            this.destino_voto = false;
         }
         this.nome_candidato = nome_candidato;
         this.nome_urna = nome_urna;
@@ -57,14 +52,15 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
                 String linha = ca.readLine();
                 if(i == true){
                     String separador[] = linha.split(",");
-                    Candidatos candidato = new Candidatos(Integer.parseInt(separador[0])
+                    if(separador[7].equals("Válido")){
+                        Candidatos candidato = new Candidatos(Integer.parseInt(separador[0])
                         , Integer.parseInt(separador[1])
                         , separador[2], separador[3]
                         , separador[4], separador[5]
-                        , separador[6], separador[7]
-                        , Integer.parseInt(separador[8])
+                        , separador[6], Integer.parseInt(separador[8])
                         , vet_Partidos[Integer.parseInt(separador[8])].getSigla());
-                    list_Candidatos.add(candidato);
+                        list_Candidatos.add(candidato);
+                    }
                 }else i = true;
             }
             ca.close();
@@ -126,6 +122,7 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         System.out.println();
     }
 
+    /*//mudar pra classe partidos
     public void votos_Partido(List<Candidatos> list_Candidatos, Partidos []vet_Partidos, List<Partidos> list_Partidos){
         int [][]matPartidos = new int[100][2];
         
@@ -156,10 +153,53 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
             " candidatos eleito");
             /*System.out.printf("%d - %s - %d, %d votos (%d nominais e %d de legenda), %d candidatos eleito\n",
             i,elem.getSigla(),elem.getNumero(),elem.getVotosTotal(),matPartidos[elem.getNumero()][0],
-            vet_Partidos[elem.getNumero()].getVotosLegenda(), matPartidos[elem.getNumero()][1]);*/
+            vet_Partidos[elem.getNumero()].getVotosLegenda(), matPartidos[elem.getNumero()][1]);
             i++;
         }
         System.out.println();
+    }*/
+
+    public void Primeiro_Ultimo(List<Partidos> list_Partidos, List<Candidatos> list_Candidatos){
+        List <Candidatos> candidatos_MaisVotados = new ArrayList<Candidatos>();
+        List <Candidatos> candidatos_MenosVotados = new ArrayList<Candidatos>();
+        Collections.sort(list_Candidatos);
+        for(Partidos elem: list_Partidos){
+            if(elem.getVotosTotal() != 0){
+                for(Candidatos candidato: list_Candidatos){
+                    if(candidato.getNumero() == elem.getNumero()){
+                        candidatos_MaisVotados.add(candidato);
+                        break;
+                    }
+                }
+                for(int i = list_Candidatos.size() - 1; i >= 0;  i--){
+                    Candidatos aux = list_Candidatos.get(i);
+                    if(aux.getNumero() == elem.getNumero()){
+                        candidatos_MenosVotados.add(aux);
+                        break;
+                    }
+                }
+            }
+        }
+        Collections.sort(candidatos_MaisVotados, new Compara_Vn_Np());
+        int i = 1;
+        for(Candidatos elem: candidatos_MaisVotados){
+            System.out.print(i+ " - " + elem.getSigla() + 
+                                " - " + elem.getNumero() + 
+                                ", " + elem.nome_urna + 
+                                " (" + elem.numero_candidato + 
+                                ", " + elem.votos_nominais + 
+                                " votos" + ") ");
+            for(Candidatos candidatos: candidatos_MenosVotados){
+                if(candidatos.getNumero() == elem.getNumero() ){
+                    System.out.println( " / " + candidatos.nome_urna + 
+                                        " (" + candidatos.numero_candidato + 
+                                        ", " + candidatos.votos_nominais + 
+                                        " votos" + ") ");
+                    break;
+                }
+            }
+            i++;
+        }
     }
 
     private void printa_ListaCandidatos(List<Candidatos> list_Candidatos){
@@ -188,4 +228,22 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         else return c.votos_nominais - this.votos_nominais;
     }
 
+    public int getVotos_Nominais(){
+        return this.votos_nominais;
+    }
+
+    public char getSituacao(){
+        return this.situacao;
+    }
+
+}
+
+class Compara_Vn_Np implements Comparator<Candidatos>{
+    public int compare(Candidatos c1, Candidatos c2){
+        if(c1.getVotos_Nominais() == c2.getVotos_Nominais()){
+            return c1.getNumero() - c2.getNumero();
+        }
+        else if(c1.getVotos_Nominais() > c2.getVotos_Nominais()) return -1;
+        else return 1;
+    }
 }
