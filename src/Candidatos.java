@@ -5,16 +5,14 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.Period;
 
 public class Candidatos extends Partidos implements Comparable<Candidatos>{
     private int numero_candidato,votos_nominais;
     private String nome_candidato,nome_urna;
-    Date data_nasc;
-    private char situacao;
-    private boolean sexo;
+    LocalDate data_nasc;
+    private char situacao, sexo;
 
     public Candidatos() {}
 
@@ -29,19 +27,12 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
             this.situacao = 'N';
         }
         this.votos_nominais = votos_nominais;
-        if(sexo.equals("F")){
-            this.sexo = true;
-        }else{
-            this.sexo = false;
-        }
+        this.sexo = sexo.charAt(0);
         this.nome_candidato = nome_candidato;
         this.nome_urna = nome_urna;
-
-        //KKKKKKK Q Q TA ACONTECENDO
-        try{
-            SimpleDateFormat sdformat = new SimpleDateFormat("dd/MM/yyyy");
-            this.data_nasc = sdformat.parse(data_nasc);
-        }catch (ParseException ex){}
+        
+        String separador[] = data_nasc.split("/");
+        this.data_nasc = LocalDate.of(Integer.parseInt(separador[2]),Integer.parseInt(separador[1]),Integer.parseInt(separador[0])); 
     }
 
     public void preenche_Lista(List<Candidatos> list_Candidatos, Partidos []vet_Partidos, String caminho){
@@ -69,7 +60,7 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         }
     }
 
-    public int Numero_de_vagas (List<Candidatos> list_Candidatos, List<Candidatos> list_candidatos_Eleitos){
+    public void Numero_de_vagas (List<Candidatos> list_Candidatos, List<Candidatos> list_candidatos_Eleitos){
         int n_Vagas = 0;
         for(Candidatos elem: list_Candidatos){
            if(elem.situacao == 'E'){
@@ -77,9 +68,8 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
                n_Vagas++;
            }
         }
+        Collections.sort(list_candidatos_Eleitos);
         System.out.printf("Número de vagas: %d\n\n",n_Vagas);
-
-        return n_Vagas;
     }
 
     public void Eleitos(List<Candidatos> list_candidatos_Eleitos){
@@ -87,15 +77,23 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         printa_ListaCandidatos(list_candidatos_Eleitos);
     }
 
-    public void mais_Votados(List<Candidatos> list_candidatos_Eleitos){
-        Collections.sort(list_candidatos_Eleitos);
+    public void mais_Votados(List<Candidatos> list_candidatos, int n_Eleitos){
+        int i=1;
         System.out.println("Candidatos mais votados (em ordem decrescente de votação e respeitando número de vagas):");
-        printa_ListaCandidatos(list_candidatos_Eleitos);
+        Collections.sort(list_candidatos);
+        for(Candidatos elem: list_candidatos){
+            if(i > n_Eleitos){
+                break;
+            }else{
+                System.out.println(i + " - " + elem);
+            }
+            i++;
+        }
+        System.out.println();
     }
 
     public void Eleitos_se_Majoritario(List<Candidatos> list_Candidatos,List<Candidatos> list_candidatos_Eleitos,int n_Vagas){
-        Collections.sort(list_Candidatos);
-        System.out.println("Candidatos não eleitos e que seriam eleitos se a votação fosse majoritária:");
+        System.out.println("Teriam sido eleitos se a votação fosse majoritária, e não foram eleitos:\n(com sua posição no ranking de mais votados)");
         int i = 1;
 
         for(Candidatos elem: list_Candidatos){
@@ -108,7 +106,7 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
     }
     
     public void Nao_eleitos_se_Majoritario(List<Candidatos> list_Candidatos, int n_Vagas){
-        System.out.println("Candidatos eleitos no sistema proporcional vigente, e que não seriam eleitos se a votação fosse majoritária:");
+        System.out.println("Eleitos, que se beneficiaram do sistema proporcional:\n(com sua posição no ranking de mais votados)");
         int i = 1;
         Candidatos candidatoAux = list_Candidatos.get(n_Vagas - 1);
         for(Candidatos elem: list_Candidatos){
@@ -121,43 +119,6 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         }
         System.out.println();
     }
-
-    /*//mudar pra classe partidos
-    public void votos_Partido(List<Candidatos> list_Candidatos, Partidos []vet_Partidos, List<Partidos> list_Partidos){
-        int [][]matPartidos = new int[100][2];
-        
-        for(int i = 0; i<100 ;i++){
-            matPartidos[i][0] = 0;
-            matPartidos[i][1] = 0;
-        }
-        for(Candidatos elem: list_Candidatos){
-            if(elem.situacao == 'E') matPartidos[elem.getNumero()][1]++;
-            matPartidos[elem.getNumero()][0] += elem.votos_nominais; 
-        }
-        for(Partidos elem: vet_Partidos){
-            if(elem != null){
-                Partidos partido = new Partidos(elem.getNumero(),
-                    elem.getVotosLegenda(), elem.getNome(), elem.getSigla(),
-                    elem.getVotosLegenda()+matPartidos[elem.getNumero()][0]);
-                list_Partidos.add(partido);
-            }
-        }
-        Collections.sort(list_Partidos, new Compara_Vt_Np());
-        int i=1;
-        System.out.println("Votação dos partidos e número de candidatos eleitos:");
-        for(Partidos elem: list_Partidos){
-            System.out.println(i + elem.toString() + elem.getVotosTotal() + 
-            " votos (" + matPartidos[elem.getNumero()][0] + 
-            " nominais e " + vet_Partidos[elem.getNumero()].getVotosLegenda() + 
-            "), " + matPartidos[elem.getNumero()][1] + 
-            " candidatos eleito");
-            /*System.out.printf("%d - %s - %d, %d votos (%d nominais e %d de legenda), %d candidatos eleito\n",
-            i,elem.getSigla(),elem.getNumero(),elem.getVotosTotal(),matPartidos[elem.getNumero()][0],
-            vet_Partidos[elem.getNumero()].getVotosLegenda(), matPartidos[elem.getNumero()][1]);
-            i++;
-        }
-        System.out.println();
-    }*/
 
     public void Primeiro_Ultimo(List<Partidos> list_Partidos, List<Candidatos> list_Candidatos){
         List <Candidatos> candidatos_MaisVotados = new ArrayList<Candidatos>();
@@ -182,24 +143,58 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         }
         Collections.sort(candidatos_MaisVotados, new Compara_Vn_Np());
         int i = 1;
+        System.out.println("Primeiro e último colocados de cada partido:");
         for(Candidatos elem: candidatos_MaisVotados){
             System.out.print(i+ " - " + elem.getSigla() + 
                                 " - " + elem.getNumero() + 
                                 ", " + elem.nome_urna + 
                                 " (" + elem.numero_candidato + 
                                 ", " + elem.votos_nominais + 
-                                " votos" + ") ");
+                                " votos" + ")");
             for(Candidatos candidatos: candidatos_MenosVotados){
                 if(candidatos.getNumero() == elem.getNumero() ){
                     System.out.println( " / " + candidatos.nome_urna + 
                                         " (" + candidatos.numero_candidato + 
                                         ", " + candidatos.votos_nominais + 
-                                        " votos" + ") ");
+                                        " votos" + ")");
                     break;
                 }
             }
             i++;
         }
+        System.out.println();
+    }
+
+    public void distribuicao_Idade(List<Candidatos> list_candidatos_Eleitos){
+        int intervalo1 = 0, intervalo2 = 0, intervalo3 = 0, intervalo4 = 0, intervalo5 = 0;
+        LocalDate eleicao = LocalDate.of(2020,11,15);
+        for(Candidatos elem: list_candidatos_Eleitos){
+            Period period = Period.between(elem.data_nasc, eleicao);
+            int ano = period.getYears();
+            if(ano<30) intervalo1++;
+            else if(ano >= 30 && ano < 40) intervalo2++;
+            else if(ano >= 40 && ano < 50) intervalo3++;
+            else if(ano >= 50 && ano < 60) intervalo4++;
+            else intervalo5++;
+        }
+        System.out.println("Eleitos, por faixa etária (na data da eleição):");
+        System.out.printf("      Idade < 30: %d (%.2f%%)\n",intervalo1,100*Double.valueOf(intervalo1)/Double.valueOf(list_candidatos_Eleitos.size()));
+        System.out.printf("30 <= Idade < 40: %d (%.2f%%)\n",intervalo2,100*Double.valueOf(intervalo2)/Double.valueOf(list_candidatos_Eleitos.size()));
+        System.out.printf("40 <= Idade < 50: %d (%.2f%%)\n",intervalo3,100*Double.valueOf(intervalo3)/Double.valueOf(list_candidatos_Eleitos.size()));
+        System.out.printf("50 <= Idade < 60: %d (%.2f%%)\n",intervalo4,100*Double.valueOf(intervalo4)/Double.valueOf(list_candidatos_Eleitos.size()));
+        System.out.printf("60 <= Idade     : %d (%.2f%%)\n\n",intervalo5,100*Double.valueOf(intervalo5)/Double.valueOf(list_candidatos_Eleitos.size()));
+    }
+
+    public void distribuicao_Sexo(List<Candidatos> list_candidatos_Eleitos){
+        int candidatos_M = 0;
+        int candidatos_F = 0;
+        for(Candidatos elem: list_candidatos_Eleitos){
+            if(elem.sexo == 'F')    candidatos_F++;
+            else if(elem.sexo == 'M') candidatos_M++;
+        }
+        System.out.println("Eleitos, por sexo:");
+        System.out.printf("Feminino:  %d (%.2f%%)\n",candidatos_F,100*(Double.valueOf(candidatos_F)/Double.valueOf(list_candidatos_Eleitos.size())));
+        System.out.printf("Masculino: %d (%.2f%%)\n\n",candidatos_M,100*(Double.valueOf(candidatos_M)/Double.valueOf(list_candidatos_Eleitos.size())));
     }
 
     private void printa_ListaCandidatos(List<Candidatos> list_Candidatos){
@@ -213,17 +208,20 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
 
     @Override
     public String toString(){
+        if(this.votos_nominais != 1){
+            return  this.nome_candidato + " / "
+            + this.nome_urna + " (" + super.getSigla()
+            + ", " + this.votos_nominais + " votos)";
+        }
         return  this.nome_candidato + " / "
         + this.nome_urna + " (" + super.getSigla()
-        + ", " + this.votos_nominais + " votos)";
+        + ", " + this.votos_nominais + " voto)";
     }
 
-    //adicionar um criterio de desempata que escolha o candidato mais velho por cima;
-    //se a data de c > this, retonar 1, else return 0
     @Override
     public int compareTo(Candidatos c){
         if(c.votos_nominais - this.votos_nominais == 0){
-            return c.data_nasc.compareTo(this.data_nasc);
+            return c.data_nasc.compareTo(this.data_nasc)*(-1);
         }
         else return c.votos_nominais - this.votos_nominais;
     }

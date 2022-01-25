@@ -8,6 +8,7 @@ import java.util.List;
 
 
     TESTAR OS CRITÉRIOS DE DESEMPATE
+    COLOCAR AS ORDENAÇÕES NA MAIN, TALVEZ QU3EM SABE
 
 
 
@@ -26,13 +27,16 @@ public class App{
         partido.preenche_Vetor(vet_Partidos, "script/testes/vitória/in/partidos.csv");
         candidato.preenche_Lista(list_Candidatos, vet_Partidos, "script/testes/vitória/in/candidatos.csv");
 
-        int n_Vagas = candidato.Numero_de_vagas(list_Candidatos,list_candidatos_Eleitos);
+        candidato.Numero_de_vagas(list_Candidatos,list_candidatos_Eleitos);
         candidato.Eleitos(list_candidatos_Eleitos);
-        candidato.mais_Votados(list_candidatos_Eleitos);
-        candidato.Eleitos_se_Majoritario(list_Candidatos,list_candidatos_Eleitos,n_Vagas);
-        candidato.Nao_eleitos_se_Majoritario(list_Candidatos, n_Vagas);
+        candidato.mais_Votados(list_Candidatos, list_candidatos_Eleitos.size());
+        candidato.Eleitos_se_Majoritario(list_Candidatos,list_candidatos_Eleitos,list_candidatos_Eleitos.size());
+        candidato.Nao_eleitos_se_Majoritario(list_Candidatos, list_candidatos_Eleitos.size());
         partido.votos_Partido(list_Candidatos, vet_Partidos, list_Partidos);
         partido.Votos_de_Legenda(list_Partidos);
         candidato.Primeiro_Ultimo(list_Partidos, list_Candidatos);
+        candidato.distribuicao_Idade(list_candidatos_Eleitos);
+        candidato.distribuicao_Sexo(list_candidatos_Eleitos);
+        partido.balanco_Votos(list_Partidos);
     }
 }

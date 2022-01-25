@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -68,23 +67,35 @@ public class Partidos {
         int i=1;
         System.out.println("Votação dos partidos e número de candidatos eleitos:");
         for(Partidos elem: list_Partidos){
-            System.out.println(i + elem.toString() + elem.votos_Total + 
-            " votos (" + matPartidos[elem.numero_partido][0] + 
-            " nominais e " + vet_Partidos[elem.numero_partido].votos_Legenda + 
-            "), " + matPartidos[elem.numero_partido][1] + 
-            " candidatos eleito");
+            if(matPartidos[elem.numero_partido][0] > 1){
+                System.out.print(i + elem.toString() + elem.votos_Total + 
+                " votos (" + matPartidos[elem.numero_partido][0] + 
+                " nominais e " + vet_Partidos[elem.numero_partido].votos_Legenda + 
+                " de legenda), " + matPartidos[elem.numero_partido][1]);
+                }
+            else{
+                System.out.print(i + elem.toString() + elem.votos_Total + 
+                " voto (" + matPartidos[elem.numero_partido][0] + 
+                " nominal e " + vet_Partidos[elem.numero_partido].votos_Legenda + 
+                " de legenda), " + matPartidos[elem.numero_partido][1]);
+            }
+            if(matPartidos[elem.numero_partido][1] > 1){
+                System.out.println(" candidatos eleitos");
+            }else{
+                System.out.println(" candidato eleito");
+            }
             i++;
         }
         System.out.println();
     }
 
-    //duvida
     public void Votos_de_Legenda(List<Partidos> list_Partidos){
         Collections.sort(list_Partidos, new Compara_Vt_Vl_Np());
         int i=1;
         System.out.println("Votação dos partidos (apenas votos de legenda):");
         for(Partidos elem: list_Partidos){
-            System.out.print(i + elem.toString() + elem.votos_Legenda + " votos de legenda (");
+            if(elem.votos_Legenda > 1)  System.out.print(i + elem.toString() + elem.votos_Legenda + " votos de legenda (");
+            else System.out.print(i + elem.toString() + elem.votos_Legenda + " voto de legenda (");
             if(elem.votos_Legenda != 0){
                 double pc = 100*(Double.valueOf(elem.votos_Legenda)/Double.valueOf(elem.votos_Total));
                 System.out.printf("%.2f%% do total do partido)\n",pc);
@@ -96,49 +107,17 @@ public class Partidos {
         System.out.println();
     }
 
-    //mudar para classe candidatos
-    /*public void Primeiro_Ultimo(List<Partidos> list_Partidos, List<Candidatos> list_Candidatos){
-        List <Candidatos> candidatos_MaisVotados = new ArrayList<Candidatos>();
-        List <Candidatos> candidatos_MenosVotados = new ArrayList<Candidatos>();
-        Collections.sort(list_Candidatos);
+    public void balanco_Votos(List <Partidos> list_Partidos){
+        int total_votos = 0, total_votos_nominais = 0, total_votos_legenda = 0;
         for(Partidos elem: list_Partidos){
-            if(elem.votos_Total != 0){
-                for(Candidatos candidato: list_Candidatos){
-                    if(candidato.getNumero() == elem.numero_partido){
-                        candidatos_MaisVotados.add(candidato);
-                        break;
-                    }
-                }
-                for(int i = list_Candidatos.size() - 1; i >= 0;  i--){
-                    Candidatos aux = list_Candidatos.get(i);
-                    if(aux.getNumero() == elem.numero_partido){
-                        candidatos_MenosVotados.add(aux);
-                        break;
-                    }
-                }
-            }
+            total_votos += elem.votos_Total;
+            total_votos_nominais += (elem.votos_Total - elem.votos_Legenda);
+            total_votos_legenda += elem.votos_Legenda;
         }
-        Collections.sort(candidatos_MaisVotados, new Compara_Vn_Np());
-        int i = 1;
-        for(Candidatos elem: candidatos_MaisVotados){
-            System.out.print(i+ " - " + elem.getSigla() + 
-                                " - " + elem.getNumero() + 
-                                ", " + elem.getNome_Urna() + 
-                                " (" + elem.getNumero_candidato() + 
-                                ", " + elem.getVotos_Nominais() + 
-                                " votos" + ") ");
-            for(Candidatos candidatos: candidatos_MenosVotados){
-                if(candidatos.getNumero() == elem.getNumero() ){
-                    System.out.println( " / " + candidatos.getNome_Urna() + 
-                                        " (" + candidatos.getNumero_candidato() + 
-                                        ", " + candidatos.getVotos_Nominais() + 
-                                        " votos" + ") ");
-                    break;
-                }
-            }
-            i++;
-        }
-    }*/
+        System.out.println("Total de votos válidos:    " + total_votos);
+        System.out.printf("Total de votos nominais:   %d (%.2f%%)\n",total_votos_nominais, 100*(Double.valueOf(total_votos_nominais)/Double.valueOf(total_votos)));
+        System.out.printf("Total de votos de legenda: %d (%.2f%%)\n",total_votos_legenda, 100*(Double.valueOf(total_votos_legenda)/Double.valueOf(total_votos)));
+    }
 
     public String getSigla(){
         return this.sigla;
