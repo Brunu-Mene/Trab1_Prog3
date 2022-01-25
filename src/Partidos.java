@@ -100,7 +100,7 @@ public class Partidos {
                 double pc = 100*(Double.valueOf(elem.votos_Legenda)/Double.valueOf(elem.votos_Total));
                 System.out.printf("%.2f%% do total do partido)\n",pc);
             }else{
-                System.out.println("proporção não calculada, 0 voto no partido)");
+                System.out.println("proporção não calculada, " + elem.votos_Total + " voto no partido)");
             }
             i++;
         }

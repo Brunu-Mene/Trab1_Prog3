@@ -1,24 +1,12 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-/**
-
-
-
-
-
-    TESTAR OS CRITÉRIOS DE DESEMPATE
-    COLOCAR AS ORDENAÇÕES NA MAIN, TALVEZ QU3EM SABE
-
-
-
-
-
- */
+import java.util.Locale;
 
 public class App{
+
     public static void main(String[] args) {
+        Locale.setDefault(new Locale("pt", "BR"));
         List<Candidatos> list_Candidatos = new ArrayList<Candidatos>();
         List<Candidatos> list_candidatos_Eleitos = new ArrayList<Candidatos>();
         List<Partidos> list_Partidos = new ArrayList<Partidos>();
@@ -26,9 +14,9 @@ public class App{
         Partidos partido = new Partidos();
         Candidatos candidato = new Candidatos();
         partido.preenche_Vetor(vet_Partidos, "script/testes/vitória/in/partidos.csv");
-        candidato.preenche_Lista(list_Candidatos, vet_Partidos, "script/testes/vitória/in/candidatos.csv");
+        candidato.preenche_Listas(list_Candidatos,list_candidatos_Eleitos,vet_Partidos, "script/testes/vitória/in/candidatos.csv");
 
-        candidato.Numero_de_vagas(list_Candidatos,list_candidatos_Eleitos);
+        candidato.Numero_de_vagas(list_candidatos_Eleitos.size());
 
         Collections.sort(list_Candidatos);
         Collections.sort(list_candidatos_Eleitos);
@@ -43,7 +31,7 @@ public class App{
 
         candidato.Primeiro_Ultimo(list_Partidos, list_Candidatos);
 
-        candidato.distribuicao_Idade(list_candidatos_Eleitos);
+        candidato.distribuicao_Idade(list_candidatos_Eleitos,"15/11/2020");
         candidato.distribuicao_Sexo(list_candidatos_Eleitos);
         partido.balanco_Votos(list_Partidos);
     }

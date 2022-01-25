@@ -35,7 +35,7 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         this.data_nasc = LocalDate.of(Integer.parseInt(separador[2]),Integer.parseInt(separador[1]),Integer.parseInt(separador[0])); 
     }
 
-    public void preenche_Lista(List<Candidatos> list_Candidatos, Partidos []vet_Partidos, String caminho){
+    public void preenche_Listas(List<Candidatos> list_Candidatos,List<Candidatos> list_candidatos_Eleitos,Partidos []vet_Partidos, String caminho){
         try{
             BufferedReader ca = new BufferedReader(new FileReader(caminho));
             boolean i = false;
@@ -51,6 +51,7 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
                         , separador[6], Integer.parseInt(separador[8])
                         , vet_Partidos[Integer.parseInt(separador[8])].getSigla());
                         list_Candidatos.add(candidato);
+                        if(candidato.situacao == 'E') list_candidatos_Eleitos.add(candidato);
                     }
                 }else i = true;
             }
@@ -60,14 +61,8 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         }
     }
 
-    public void Numero_de_vagas (List<Candidatos> list_Candidatos, List<Candidatos> list_candidatos_Eleitos){
-        int n_Vagas = 0;
-        for(Candidatos elem: list_Candidatos){
-           if(elem.situacao == 'E'){
-               list_candidatos_Eleitos.add(elem);
-               n_Vagas++;
-           }
-        }
+    
+    public void Numero_de_vagas (int n_Vagas){
         System.out.printf("Número de vagas: %d\n\n",n_Vagas);
     }
 
@@ -123,6 +118,7 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         System.out.println();
     }
 
+    //
     public void Primeiro_Ultimo(List<Partidos> list_Partidos, List<Candidatos> list_Candidatos){
         List <Candidatos> candidatos_MaisVotados = new ArrayList<Candidatos>();
         List <Candidatos> candidatos_MenosVotados = new ArrayList<Candidatos>();
@@ -147,18 +143,34 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         int i = 1;
         System.out.println("Primeiro e último colocados de cada partido:");
         for(Candidatos elem: candidatos_MaisVotados){
-            System.out.print(i+ " - " + elem.getSigla() + 
+            if(elem.votos_nominais > 1){
+                    System.out.print(i+ " - " + elem.getSigla() + 
+                                        " - " + elem.getNumero() + 
+                                        ", " + elem.nome_urna + 
+                                        " (" + elem.numero_candidato + 
+                                        ", " + elem.votos_nominais + 
+                                        " votos" + ")");
+                                }
+            else{
+                System.out.print(i+ " - " + elem.getSigla() + 
                                 " - " + elem.getNumero() + 
                                 ", " + elem.nome_urna + 
                                 " (" + elem.numero_candidato + 
                                 ", " + elem.votos_nominais + 
-                                " votos" + ")");
+                                " voto" + ")");
+            }
             for(Candidatos candidatos: candidatos_MenosVotados){
                 if(candidatos.getNumero() == elem.getNumero() ){
-                    System.out.println( " / " + candidatos.nome_urna + 
-                                        " (" + candidatos.numero_candidato + 
-                                        ", " + candidatos.votos_nominais + 
-                                        " votos" + ")");
+                    if(candidatos.votos_nominais > 1)
+                        System.out.println( " / " + candidatos.nome_urna + 
+                                            " (" + candidatos.numero_candidato + 
+                                            ", " + candidatos.votos_nominais + 
+                                            " votos" + ")");
+                    else
+                        System.out.println( " / " + candidatos.nome_urna + 
+                                            " (" + candidatos.numero_candidato + 
+                                            ", " + candidatos.votos_nominais + 
+                                            " voto" + ")");
                     break;
                 }
             }
@@ -167,9 +179,10 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         System.out.println();
     }
 
-    public void distribuicao_Idade(List<Candidatos> list_candidatos_Eleitos){
+    public void distribuicao_Idade(List<Candidatos> list_candidatos_Eleitos, String data_Eleicao){
         int intervalo1 = 0, intervalo2 = 0, intervalo3 = 0, intervalo4 = 0, intervalo5 = 0;
-        LocalDate eleicao = LocalDate.of(2020,11,15);
+        String []separador = data_Eleicao.split("/");
+        LocalDate eleicao = LocalDate.of(Integer.parseInt(separador[2]),Integer.parseInt(separador[1]),Integer.parseInt(separador[0]));
         for(Candidatos elem: list_candidatos_Eleitos){
             Period period = Period.between(elem.data_nasc, eleicao);
             int ano = period.getYears();
