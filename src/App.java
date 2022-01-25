@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,13 +29,20 @@ public class App{
         candidato.preenche_Lista(list_Candidatos, vet_Partidos, "script/testes/vitória/in/candidatos.csv");
 
         candidato.Numero_de_vagas(list_Candidatos,list_candidatos_Eleitos);
+
+        Collections.sort(list_Candidatos);
+        Collections.sort(list_candidatos_Eleitos);
         candidato.Eleitos(list_candidatos_Eleitos);
         candidato.mais_Votados(list_Candidatos, list_candidatos_Eleitos.size());
         candidato.Eleitos_se_Majoritario(list_Candidatos,list_candidatos_Eleitos,list_candidatos_Eleitos.size());
         candidato.Nao_eleitos_se_Majoritario(list_Candidatos, list_candidatos_Eleitos.size());
+
         partido.votos_Partido(list_Candidatos, vet_Partidos, list_Partidos);
+
         partido.Votos_de_Legenda(list_Partidos);
+
         candidato.Primeiro_Ultimo(list_Partidos, list_Candidatos);
+
         candidato.distribuicao_Idade(list_candidatos_Eleitos);
         candidato.distribuicao_Sexo(list_candidatos_Eleitos);
         partido.balanco_Votos(list_Partidos);

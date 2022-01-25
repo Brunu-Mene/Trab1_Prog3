@@ -68,19 +68,22 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
                n_Vagas++;
            }
         }
-        Collections.sort(list_candidatos_Eleitos);
         System.out.printf("Número de vagas: %d\n\n",n_Vagas);
     }
 
     public void Eleitos(List<Candidatos> list_candidatos_Eleitos){
         System.out.println("Vereadores eleitos:");
-        printa_ListaCandidatos(list_candidatos_Eleitos);
+        int i = 1;
+        for(Candidatos elem: list_candidatos_Eleitos){
+            System.out.println(i + " - " + elem);
+            i++;
+        }
+        System.out.println();
     }
 
     public void mais_Votados(List<Candidatos> list_candidatos, int n_Eleitos){
         int i=1;
         System.out.println("Candidatos mais votados (em ordem decrescente de votação e respeitando número de vagas):");
-        Collections.sort(list_candidatos);
         for(Candidatos elem: list_candidatos){
             if(i > n_Eleitos){
                 break;
@@ -123,7 +126,6 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
     public void Primeiro_Ultimo(List<Partidos> list_Partidos, List<Candidatos> list_Candidatos){
         List <Candidatos> candidatos_MaisVotados = new ArrayList<Candidatos>();
         List <Candidatos> candidatos_MenosVotados = new ArrayList<Candidatos>();
-        Collections.sort(list_Candidatos);
         for(Partidos elem: list_Partidos){
             if(elem.getVotosTotal() != 0){
                 for(Candidatos candidato: list_Candidatos){
@@ -195,15 +197,6 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         System.out.println("Eleitos, por sexo:");
         System.out.printf("Feminino:  %d (%.2f%%)\n",candidatos_F,100*(Double.valueOf(candidatos_F)/Double.valueOf(list_candidatos_Eleitos.size())));
         System.out.printf("Masculino: %d (%.2f%%)\n\n",candidatos_M,100*(Double.valueOf(candidatos_M)/Double.valueOf(list_candidatos_Eleitos.size())));
-    }
-
-    private void printa_ListaCandidatos(List<Candidatos> list_Candidatos){
-        int i = 1;
-        for(Candidatos elem: list_Candidatos){
-            System.out.println(i + " - " + elem);
-            i++;
-        }
-        System.out.println();
     }
 
     @Override

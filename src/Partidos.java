@@ -154,9 +154,9 @@ class Compara_Vt_Np implements Comparator<Partidos> {
 class Compara_Vt_Vl_Np implements Comparator<Partidos> {
     public int compare(Partidos p1, Partidos p2){
         if(p1.getVotosLegenda() == p2.getVotosLegenda()){
-            if(p1.getVotosTotal() > p2.getVotosTotal()) return -1;
-            else if(p1.getVotosTotal() < p2.getVotosTotal()) return 1;
-            else return p1.getNumero() - p2.getNumero();
+            if(p1.getVotosTotal() - p1.getVotosLegenda() == p2.getVotosTotal() - p2.getVotosLegenda()) 
+                return p1.getNumero() - p2.getNumero();
+            return (p2.getVotosTotal() - p2.getVotosLegenda()) - (p1.getVotosTotal() - p1.getVotosLegenda());
         }
         else if(p1.getVotosLegenda() > p2.getVotosLegenda()) return -1;
         else return 1;
