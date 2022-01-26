@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class App{
-
     public static void main(String[] args) {
         Locale.setDefault(new Locale("pt", "BR"));
         List<Candidatos> list_Candidatos = new ArrayList<Candidatos>();

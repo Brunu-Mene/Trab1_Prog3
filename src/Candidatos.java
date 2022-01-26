@@ -229,7 +229,7 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         if(c.votos_nominais - this.votos_nominais == 0){
             return c.data_nasc.compareTo(this.data_nasc)*(-1);
         }
-        else return c.votos_nominais - this.votos_nominais;
+        return c.votos_nominais - this.votos_nominais;
     }
 
     public int getVotos_Nominais(){
@@ -247,7 +247,6 @@ class Compara_Vn_Np implements Comparator<Candidatos>{
         if(c1.getVotos_Nominais() == c2.getVotos_Nominais()){
             return c1.getNumero() - c2.getNumero();
         }
-        else if(c1.getVotos_Nominais() > c2.getVotos_Nominais()) return -1;
-        else return 1;
+        return c2.getVotos_Nominais() - c1.getVotos_Nominais();
     }
 }

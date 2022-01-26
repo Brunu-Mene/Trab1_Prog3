@@ -146,8 +146,7 @@ class Compara_Vt_Np implements Comparator<Partidos> {
         if(p1.getVotosTotal() == p2.getVotosTotal()){
             return p1.getNumero() - p2.getNumero();
         }
-        else if(p1.getVotosTotal() > p2.getVotosTotal()) return -1;
-        else return 1;
+        return p2.getVotosTotal() - p1.getVotosTotal();
     }
 }
 
@@ -158,7 +157,6 @@ class Compara_Vt_Vl_Np implements Comparator<Partidos> {
                 return p1.getNumero() - p2.getNumero();
             return (p2.getVotosTotal() - p2.getVotosLegenda()) - (p1.getVotosTotal() - p1.getVotosLegenda());
         }
-        else if(p1.getVotosLegenda() > p2.getVotosLegenda()) return -1;
-        else return 1;
+        return p2.getVotosLegenda() - p1.getVotosLegenda();
     }
 }
