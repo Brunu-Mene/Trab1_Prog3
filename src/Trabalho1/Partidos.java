@@ -1,3 +1,5 @@
+package Trabalho1;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -116,7 +118,7 @@ public class Partidos {
         }
         System.out.println("Total de votos válidos:    " + total_votos);
         System.out.printf("Total de votos nominais:   %d (%.2f%%)\n",total_votos_nominais, 100*(Double.valueOf(total_votos_nominais)/Double.valueOf(total_votos)));
-        System.out.printf("Total de votos de legenda: %d (%.2f%%)\n",total_votos_legenda, 100*(Double.valueOf(total_votos_legenda)/Double.valueOf(total_votos)));
+        System.out.printf("Total de votos de legenda: %d (%.2f%%)\n\n\n",total_votos_legenda, 100*(Double.valueOf(total_votos_legenda)/Double.valueOf(total_votos)));
     }
 
     public String getSigla(){

@@ -1,3 +1,5 @@
+package Trabalho1;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,8 +14,8 @@ public class App{
         Partidos []vet_Partidos = new Partidos[100];
         Partidos partido = new Partidos();
         Candidatos candidato = new Candidatos();
-        partido.preenche_Vetor(vet_Partidos, "script/testes/vitória/in/partidos.csv");
-        candidato.preenche_Listas(list_Candidatos,list_candidatos_Eleitos,vet_Partidos, "script/testes/vitória/in/candidatos.csv");
+        partido.preenche_Vetor(vet_Partidos, args[1]);
+        candidato.preenche_Listas(list_Candidatos,list_candidatos_Eleitos,vet_Partidos, args[0]);
 
         candidato.Numero_de_vagas(list_candidatos_Eleitos.size());
 
@@ -30,7 +32,7 @@ public class App{
 
         candidato.Primeiro_Ultimo(list_Partidos, list_Candidatos);
 
-        candidato.distribuicao_Idade(list_candidatos_Eleitos,"15/11/2020");
+        candidato.distribuicao_Idade(list_candidatos_Eleitos,args[2]);
         candidato.distribuicao_Sexo(list_candidatos_Eleitos);
         partido.balanco_Votos(list_Partidos);
     }
