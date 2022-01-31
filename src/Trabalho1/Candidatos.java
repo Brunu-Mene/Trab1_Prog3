@@ -120,7 +120,6 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         System.out.println();
     }
 
-    //
     public void Primeiro_Ultimo(List<Partidos> list_Partidos, List<Candidatos> list_Candidatos){
         List <Candidatos> candidatos_MaisVotados = new ArrayList<Candidatos>();
         List <Candidatos> candidatos_MenosVotados = new ArrayList<Candidatos>();
@@ -145,34 +144,25 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
         int i = 1;
         System.out.println("Primeiro e último colocados de cada partido:");
         for(Candidatos elem: candidatos_MaisVotados){
-            if(elem.votos_nominais > 1){
-                    System.out.print(i+ " - " + elem.getSigla() + 
-                                        " - " + elem.getNumero() + 
-                                        ", " + elem.nome_urna + 
-                                        " (" + elem.numero_candidato + 
-                                        ", " + elem.votos_nominais + 
-                                        " votos" + ")");
-                                }
-            else{
-                System.out.print(i+ " - " + elem.getSigla() + 
+            System.out.print(i+ " - " + elem.getSigla() + 
                                 " - " + elem.getNumero() + 
                                 ", " + elem.nome_urna + 
                                 " (" + elem.numero_candidato + 
-                                ", " + elem.votos_nominais + 
-                                " voto" + ")");
+                                ", " + elem.votos_nominais);
+            if(elem.votos_nominais > 1){
+                    System.out.print(" votos" + ")");
+            }else{
+                System.out.print(" voto" + ")");
             }
             for(Candidatos candidatos: candidatos_MenosVotados){
                 if(candidatos.getNumero() == elem.getNumero() ){
+                    System.out.print(" / " + candidatos.nome_urna + 
+                                            " (" + candidatos.numero_candidato + 
+                                            ", " + candidatos.votos_nominais);
                     if(candidatos.votos_nominais > 1)
-                        System.out.println( " / " + candidatos.nome_urna + 
-                                            " (" + candidatos.numero_candidato + 
-                                            ", " + candidatos.votos_nominais + 
-                                            " votos" + ")");
+                        System.out.println(" votos" + ")");
                     else
-                        System.out.println( " / " + candidatos.nome_urna + 
-                                            " (" + candidatos.numero_candidato + 
-                                            ", " + candidatos.votos_nominais + 
-                                            " voto" + ")");
+                        System.out.println(" voto" + ")");
                     break;
                 }
             }

@@ -96,8 +96,9 @@ public class Partidos {
         int i=1;
         System.out.println("Votação dos partidos (apenas votos de legenda):");
         for(Partidos elem: list_Partidos){
-            if(elem.votos_Legenda > 1)  System.out.print(i + elem.toString() + elem.votos_Legenda + " votos de legenda (");
-            else System.out.print(i + elem.toString() + elem.votos_Legenda + " voto de legenda (");
+            System.out.print(i + elem.toString() + elem.votos_Legenda);
+            if(elem.votos_Legenda > 1)  System.out.print(" votos de legenda (");
+            else System.out.print(" voto de legenda (");
             if(elem.votos_Legenda != 0){
                 double pc = 100*(Double.valueOf(elem.votos_Legenda)/Double.valueOf(elem.votos_Total));
                 System.out.printf("%.2f%% do total do partido)\n",pc);
