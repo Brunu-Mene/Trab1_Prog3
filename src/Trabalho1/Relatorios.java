@@ -64,6 +64,7 @@ public class Relatorios {
         System.out.println();
     }
 
+    //Talvez refazer essa função se der tempo, divisir em duas funções e uma delas vai pra REGISTRADORES
     public void votos_Partido(List<Candidatos> list_Candidatos, Partidos []vet_Partidos, List<Partidos> list_Partidos){
         int [][]matPartidos = new int[100][2];
         
