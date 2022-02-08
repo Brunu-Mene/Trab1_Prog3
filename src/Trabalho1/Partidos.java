@@ -45,6 +45,10 @@ public class Partidos {
     }
 }
 
+/*
+    Classe para implementar a comparação entre objetos do tipo Partido;
+    Criterio de ordenação: Votos totais e desempate pelo numero de partido.
+*/
 class Compara_Vt_Np implements Comparator<Partidos> {
     public int compare(Partidos p1, Partidos p2){
         if(p1.getVotosTotal() == p2.getVotosTotal()){
@@ -54,6 +58,10 @@ class Compara_Vt_Np implements Comparator<Partidos> {
     }
 }
 
+/*
+    Classe para implementar a comparação entre objetos do tipo Partido;
+    Criterio de ordenação: Votos de legenda e primeiro desempate pelos Votos Nominais seguido de numero de partido.
+*/
 class Compara_Vt_Vl_Np implements Comparator<Partidos> {
     public int compare(Partidos p1, Partidos p2){
         if(p1.getVotosLegenda() == p2.getVotosLegenda()){

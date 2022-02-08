@@ -74,6 +74,10 @@ public class Candidatos extends Partidos implements Comparable<Candidatos>{
 
 }
 
+/*
+    Classe para implementar a comparação entre objetos do tipo Candidatos;
+    Criterio de ordenação: Votos nominais e desempate pelo numero de partido.
+*/
 class Compara_Vn_Np implements Comparator<Candidatos>{
     public int compare(Candidatos c1, Candidatos c2){
         if(c1.getVotos_Nominais() == c2.getVotos_Nominais()){

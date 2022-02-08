@@ -7,11 +7,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class Relatorios {
-
+    
+    //Relatorio-1
     public void Numero_de_vagas (int n_Vagas){
         System.out.printf("Número de vagas: %d\n\n",n_Vagas);
     }
 
+    //Relatorio-2
     public void Eleitos(List<Candidatos> list_candidatos_Eleitos){
         System.out.println("Vereadores eleitos:");
         int i = 1;
@@ -36,7 +38,7 @@ public class Relatorios {
         System.out.println();
     }
 
-    public void Eleitos_se_Majoritario(List<Candidatos> list_Candidatos,List<Candidatos> list_candidatos_Eleitos,int n_Vagas){
+    public void Eleitos_se_Majoritario(List<Candidatos> list_Candidatos,int n_Vagas){
         System.out.println("Teriam sido eleitos se a votação fosse majoritária, e não foram eleitos:\n(com sua posição no ranking de mais votados)");
         int i = 1;
 
@@ -64,43 +66,33 @@ public class Relatorios {
         System.out.println();
     }
 
-    //Talvez refazer essa função se der tempo, divisir em duas funções e uma delas vai pra REGISTRADORES
-    public void votos_Partido(List<Candidatos> list_Candidatos, Partidos []vet_Partidos, List<Partidos> list_Partidos){
-        int [][]matPartidos = new int[100][2];
+    public void votos_Partido(List<Candidatos> list_Candidatos, List<Partidos> list_Votos_Partidos){
+        int [][]matHash_Eleitos_Partidos = new int[100][1];
         
         for(int i = 0; i<100 ;i++){
-            matPartidos[i][0] = 0;
-            matPartidos[i][1] = 0;
+            matHash_Eleitos_Partidos[i][0] = 0;
         }
         for(Candidatos elem: list_Candidatos){
-            if(elem.getSituacao() == 'E') matPartidos[elem.getNumero()][1]++;
-            matPartidos[elem.getNumero()][0] += elem.getVotos_Nominais(); 
+            if(elem.getSituacao() == 'E') 
+                matHash_Eleitos_Partidos[elem.getNumero()][0]++;
         }
-        for(Partidos elem: vet_Partidos){
-            if(elem != null){
-                Partidos partido = new Partidos(elem.getNumero(),
-                    elem.getVotosLegenda(), elem.getNome(), elem.getSigla(),
-                    elem.getVotosLegenda()+matPartidos[elem.getNumero()][0]);
-                list_Partidos.add(partido);
-            }
-        }
-        Collections.sort(list_Partidos, new Compara_Vt_Np());
+
         int i=1;
         System.out.println("Votação dos partidos e número de candidatos eleitos:");
-        for(Partidos elem: list_Partidos){
-            if(matPartidos[elem.getNumero()][0] > 1){
+        for(Partidos elem: list_Votos_Partidos){
+            if(elem.getVotosTotal() > 1){
                 System.out.print(i + elem.toString() + elem.getVotosTotal() + 
-                " votos (" + matPartidos[elem.getNumero()][0] + 
-                " nominais e " + vet_Partidos[elem.getNumero()].getVotosLegenda() + 
-                " de legenda), " + matPartidos[elem.getNumero()][1]);
+                " votos (" + (elem.getVotosTotal()-elem.getVotosLegenda()) + 
+                " nominais e " + elem.getVotosLegenda() + 
+                " de legenda), " + matHash_Eleitos_Partidos[elem.getNumero()][0]);
                 }
             else{
                 System.out.print(i + elem.toString() + elem.getVotosTotal() + 
-                " voto (" + matPartidos[elem.getNumero()][0] + 
-                " nominal e " + vet_Partidos[elem.getNumero()].getVotosLegenda() + 
-                " de legenda), " + matPartidos[elem.getNumero()][1]);
+                " voto (" + (elem.getVotosTotal()-elem.getVotosLegenda()) + 
+                " nominal e " + elem.getVotosLegenda() + 
+                " de legenda), " + matHash_Eleitos_Partidos[elem.getNumero()][0]);
             }
-            if(matPartidos[elem.getNumero()][1] > 1){
+            if(matHash_Eleitos_Partidos[elem.getNumero()][0] > 1){
                 System.out.println(" candidatos eleitos");
             }else{
                 System.out.println(" candidato eleito");
@@ -110,11 +102,11 @@ public class Relatorios {
         System.out.println();
     }
 
-    public void Votos_de_Legenda(List<Partidos> list_Partidos){
-        Collections.sort(list_Partidos, new Compara_Vt_Vl_Np());
+    public void Votos_de_Legenda(List<Partidos> list_Votos_Partidos){
+        Collections.sort(list_Votos_Partidos, new Compara_Vt_Vl_Np());
         int i=1;
         System.out.println("Votação dos partidos (apenas votos de legenda):");
-        for(Partidos elem: list_Partidos){
+        for(Partidos elem: list_Votos_Partidos){
             System.out.print(i + elem.toString() + elem.getVotosLegenda());
             if(elem.getVotosLegenda() > 1)  System.out.print(" votos de legenda (");
             else System.out.print(" voto de legenda (");
@@ -129,10 +121,10 @@ public class Relatorios {
         System.out.println();
     }
 
-    public void Primeiro_Ultimo(List<Partidos> list_Partidos, List<Candidatos> list_Candidatos){
+    public void Primeiro_Ultimo(List<Partidos> list_Votos_Partidos, List<Candidatos> list_Candidatos){
         List <Candidatos> candidatos_MaisVotados = new ArrayList<Candidatos>();
         List <Candidatos> candidatos_MenosVotados = new ArrayList<Candidatos>();
-        for(Partidos elem: list_Partidos){
+        for(Partidos elem: list_Votos_Partidos){
             if(elem.getVotosTotal() != 0){
                 for(Candidatos candidato: list_Candidatos){
                     if(candidato.getNumero() == elem.getNumero()){
@@ -213,9 +205,9 @@ public class Relatorios {
         System.out.printf("Masculino: %d (%.2f%%)\n\n",candidatos_M,100*(Double.valueOf(candidatos_M)/Double.valueOf(list_candidatos_Eleitos.size())));
     }
 
-    public void balanco_Votos(List <Partidos> list_Partidos){
+    public void balanco_Votos(List <Partidos> list_Votos_Partidos){
         int total_votos = 0, total_votos_nominais = 0, total_votos_legenda = 0;
-        for(Partidos elem: list_Partidos){
+        for(Partidos elem: list_Votos_Partidos){
             total_votos += elem.getVotosTotal();
             total_votos_nominais += (elem.getVotosTotal() - elem.getVotosLegenda());
             total_votos_legenda += elem.getVotosLegenda();
