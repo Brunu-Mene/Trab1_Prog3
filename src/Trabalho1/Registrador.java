@@ -53,7 +53,7 @@ public class Registrador {
         }
     }
 
-    public void preenche_Lista_Votos_Partidos(List<Candidatos> list_Candidatos, Partidos []vetHash_Partidos, List<Partidos> list_Partidos){
+    public void preenche_Lista_Votos_Partidos(List<Candidatos> list_Candidatos, Partidos []vetHash_Partidos, List<Partidos> list_Votos_Partidos){
         int [][]matHash_Votos_Partidos = new int[100][1];
 
         for(int i = 0; i<100 ;i++){
@@ -67,7 +67,7 @@ public class Registrador {
                 Partidos partido = new Partidos(elem.getNumero(),
                     elem.getVotosLegenda(), elem.getNome(), elem.getSigla(),
                     elem.getVotosLegenda()+matHash_Votos_Partidos[elem.getNumero()][0]);
-                list_Partidos.add(partido);
+                list_Votos_Partidos.add(partido);
             }
         }
     }
