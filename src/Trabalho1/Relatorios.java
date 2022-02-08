@@ -8,12 +8,10 @@ import java.util.List;
 
 public class Relatorios {
     
-    //Relatorio-1
     public void Numero_de_vagas (int n_Vagas){
         System.out.printf("Número de vagas: %d\n\n",n_Vagas);
     }
 
-    //Relatorio-2
     public void Eleitos(List<Candidatos> list_candidatos_Eleitos){
         System.out.println("Vereadores eleitos:");
         int i = 1;
