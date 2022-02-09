@@ -101,7 +101,6 @@ public class Relatorios {
     }
 
     public void Votos_de_Legenda(List<Partidos> list_Votos_Partidos){
-        Collections.sort(list_Votos_Partidos, new Compara_Vt_Vl_Np());
         int i=1;
         System.out.println("Votação dos partidos (apenas votos de legenda):");
         for(Partidos elem: list_Votos_Partidos){

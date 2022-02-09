@@ -33,6 +33,7 @@ public class App{
         Collections.sort(list_Votos_Partidos, new Compara_Vt_Np());
         relatorio.votos_Partido(list_Candidatos, list_Votos_Partidos);
 
+        Collections.sort(list_Votos_Partidos, new Compara_Vt_Vl_Np());
         relatorio.Votos_de_Legenda(list_Votos_Partidos);
 
         relatorio.Primeiro_Ultimo(list_Votos_Partidos, list_Candidatos);
